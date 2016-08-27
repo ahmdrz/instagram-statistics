@@ -29,3 +29,6 @@ or you can use it more easier
 ```
 
 After that , The program will be replace your instagram info in the template file and will make a new html file called output.html 
+
+### License
+See full license on [this](https://github.com/ahmdrz/instagram-statistics/blob/master/LICENSE) , Under GNU GENERAL PUBLIC LICENSE
