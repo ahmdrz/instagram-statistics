@@ -1,4 +1,6 @@
 # instagram-statistics
+<img src="https://travis-ci.org/ahmdrz/instagram-statistics.svg?branch=master" />
+
 Instagram Statistics using python and mustache
 
 ### Dependency
