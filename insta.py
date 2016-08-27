@@ -9,6 +9,7 @@ Created on Sat Aug 27 22:22:05 2016
 import requests
 import random
 import json
+import sys
 import hashlib
 import hmac
 import io
@@ -150,17 +151,51 @@ class Instagram:
 
 ##################################################
 
-insta = Instagram("USERNAME", "PASSWORD")
+if len(sys.argv) < 3 :
+    print "Incorrect input args, use insta.py <username> <password>"    
+
+username = sys.argv[1]
+password = sys.argv[2]
+
+insta = Instagram(username,password)
 insta.login()
 followers = insta.getTotalFollowers(insta.username_id)
 followings = insta.getTotalFollowings(insta.username_id)
 
-file = open('template.html', 'r')
+fans = []
+for fr in followers :
+    flag = True
+    for fg in followings:
+        if fg["pk"] == fr["pk"]:
+            flag = False
+            break
+    if flag:
+        fans.append(fr)
+        
+notfollowedback = []
+for fr in  followings:
+    flag = True
+    for fg in followers:
+        if fg["pk"] == fr["pk"]:
+            flag = False
+            break
+    if flag:
+        notfollowedback.append(fr)
+
+file = open('template.tpl', 'r')
 html = file.readlines()
 tpl = ''
 for line in html :
     tpl = tpl + " " + line
 
-output = pystache.render(tpl,{"followers":followers,"followings":followings})
+data = {
+    "followers":followers[0:5],
+    "followings":followings[0:5],
+    "username":insta.username,
+    "fans":fans[0:5],
+    "notback":notfollowedback[0:5]
+}
+
+output = pystache.render(tpl,data)
 with io.open('output.html','w',encoding='utf8') as f:
     f.write(output) 
