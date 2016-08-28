@@ -15,6 +15,7 @@ import hmac
 import io
 import urllib
 import pystache
+import os
 
 class Instagram:
     API_URL = 'https://i.instagram.com/api/v1/'
@@ -150,7 +151,6 @@ class Instagram:
 
 
 ##################################################
-
 if len(sys.argv) < 3 :
     print "Incorrect input args, use insta.py <username> <password>"    
 
@@ -182,6 +182,39 @@ for fr in  followings:
     if flag:
         notfollowedback.append(fr)
 
+newfollowers = []
+if os.path.exists('followers.json'):
+    with open('followers.json') as data_file:    
+        oldfollowers = json.load(data_file)            
+        for fr in  followers:
+            flag = True
+            for fg in oldfollowers:
+                if fg["pk"] == fr["pk"]:
+                    flag = False
+                    break
+            if flag:
+                newfollowers.append(fr)   
+
+newfollowings = []
+if os.path.exists('followings.json'):
+    with open('followings.json') as data_file:    
+        oldfollowings = json.load(data_file)    
+        for fr in followings:
+            flag = True
+            for fg in oldfollowings:
+                if fg["pk"] == fr["pk"]:
+                    flag = False
+                    break
+            if flag:
+                newfollowings.append(fr)  
+ 
+        
+with open('followers.json', 'w') as outfile:
+    json.dump(followers, outfile)
+
+with open('followings.json', 'w') as outfile:
+    json.dump(followings, outfile)
+
 file = open('template.tpl', 'r')
 html = file.readlines()
 tpl = ''
@@ -193,7 +226,9 @@ data = {
     "followings":followings[0:5],
     "username":insta.username,
     "fans":fans[0:5],
-    "notback":notfollowedback[0:5]
+    "notback":notfollowedback[0:5],
+    "newfollowers":newfollowers,
+    "newfollowings":newfollowings
 }
 
 output = pystache.render(tpl,data)

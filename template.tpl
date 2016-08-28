@@ -136,6 +136,63 @@
             </div>
         </div>
 
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="panel panel-warning">
+                    <div class="panel-heading">
+                        <h3>New Followers</h3>
+                    </div>
+                    <div class="panel-body">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Full Name</th>
+                                    <th>User Name</th>
+                                    <th>Image</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {{#newfollowers}}
+                                <tr>
+                                    <td>{{full_name}}</td>
+                                    <td>{{username}}</td>
+                                    <td><img src="{{profile_pic_url}}" class="img img-responsive center-block img-circle" style="width:50px; height:50px;" /></td>
+                                </tr>
+                                {{/newfollowers}}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="panel panel-warning">
+                    <div class="panel-heading">
+                        <h3>New Followings</h3>
+                    </div>
+                    <div class="panel-body">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Full Name</th>
+                                    <th>User Name</th>
+                                    <th>Image</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {{#newfollowings}}
+                                <tr>
+                                    <td>{{full_name}}</td>
+                                    <td>{{username}}</td>
+                                    <td><img src="{{profile_pic_url}}" class="img img-responsive center-block img-circle" style="width:50px; height:50px;" /></td>
+                                </tr>
+                                {{/newfollowings}}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <nav class="navbar navbar-inverse navbar-static-bottom">
             <div class="container">
                 <h4 class="text-center" style="color:white; margin-top:15px;">Powered by Ahmadrezazibaei 2016</h4>
