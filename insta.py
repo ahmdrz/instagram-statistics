@@ -143,3 +143,44 @@ class Instagram:
             if temp["big_list"] == False:
                 return followers            
             next_max_id = temp["next_max_id"]  
+            
+    def getUserFeed(self,usernameId,maxid = '',minTimestamp = None):
+        return self.SendRequest('feed/user/'+str(usernameId)+'/?rank_token='+self.rank_token+'&max_id='+str(maxid)+'&min_timestamp='+str(minTimestamp) +'&ranked_content=true')
+     
+    def getSelfUserFeed(self):
+        return self.getUserFeed(self.username_id)
+        
+    def getTotalUserFeed(self,usernameId):
+        feeds = []
+        next_max_id = ''
+        while 1:
+            self.getUserFeed(usernameId,next_max_id)
+            temp = self.LastJson                 
+
+            for item in temp["items"]:
+                feeds.append(item)
+                
+            if "next_max_id" not in temp:
+                return feeds  
+                        
+            next_max_id = temp["next_max_id"]
+            
+    def getTotalSelfUserFeed(self):
+        feeds = []
+        next_max_id = ''
+        while 1:
+            self.getUserFeed(self.username_id,next_max_id)
+            temp = self.LastJson                 
+
+            for item in temp["items"]:
+                feeds.append(item)
+                
+            if "next_max_id" not in temp:
+                return feeds  
+                        
+            next_max_id = temp["next_max_id"]
+            
+    def getMediaLikers(self, mediaId):
+        likers = self.SendRequest('media/'+ str(mediaId) +'/likers/?')
+        # TODO Instagram.php 1025-1035
+        return likers

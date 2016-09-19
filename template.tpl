@@ -193,6 +193,92 @@
             </div>
         </div>
 
+        <div class="row">
+            <div class="col-sm-4">
+                <div class="panel panel-warning">
+                    <div class="panel-heading">
+                        <h3>Bad Likers</h3>
+                    </div>
+                    <div class="panel-body">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>User Name</th>
+                                    <th>Count</th>
+                                    <th>Image</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            {{#badlikers}}
+                                <tr>
+                                    <td>{{username}}</td>
+                                    <td>{{count}}</td>
+                                    <td><img src="{{image}}" class="img img-responsive center-block img-circle" style="width:50px; height:50px;" /></td>
+                                </tr>
+                            {{/badlikers}}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-sm-4">
+                <div class="panel panel-warning">
+                    <div class="panel-heading">
+                        <h3>Best Likers</h3>
+                    </div>
+                    <div class="panel-body">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>User Name</th>
+                                    <th>Count</th>
+                                    <th>Image</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            {{#bestlikers}}
+                                <tr>
+                                    <td>{{username}}</td>
+                                    <td>{{count}}</td>
+                                    <td><img src="{{image}}" class="img img-responsive center-block img-circle" style="width:50px; height:50px;" /></td>
+                                </tr>
+                            {{/bestlikers}}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="col-sm-4">
+                <div class="panel panel-warning">
+                    <div class="panel-heading">
+                        <h3>Never Liked</h3>
+                    </div>
+                    <div class="panel-body">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>User Name</th>                                    
+                                    <th>Image</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            {{#neverliked}}
+                                <tr>
+                                    <td>{{username}}</td>                                    
+                                    <td><img src="{{profile_pic_url}}" class="img img-responsive center-block img-circle" style="width:50px; height:50px;" /></td>
+                                </tr>
+                            {{/neverliked}}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
         <nav class="navbar navbar-inverse navbar-static-bottom">
             <div class="container">
                 <h4 class="text-center" style="color:white; margin-top:15px;">Powered by Ahmadrezazibaei 2016</h4>
