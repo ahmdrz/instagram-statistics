@@ -1,6 +1,5 @@
 # instagram-statistics
-<img src="https://travis-ci.org/ahmdrz/instagram-statistics.svg?branch=master" />
-
+[![Build Status](https://travis-ci.org/ahmdrz/instagram-statistics.svg?branch=master)](https://travis-ci.org/ahmdrz/instagram-statistics)
 Instagram Statistics using python and mustache
 
 ### Dependency
