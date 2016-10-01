@@ -20,7 +20,10 @@ username = sys.argv[1]
 password = sys.argv[2]
 
 insta = Instagram(username,password)
-insta.login()
+if insta.login() == False:
+    print "Login failed"
+    sys.exit(2)
+    
 temp = insta.getTotalUserFeed(insta.username_id)
 likedUsers = {}
 for item in temp:
