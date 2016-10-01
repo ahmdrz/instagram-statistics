@@ -53,7 +53,8 @@ class Instagram:
                     self.rank_token = "%s_%s" % (self.username_id, self.uuid)
                     self.token = self.LastResponse.cookies["csrftoken"]
 
-                    return True;        
+                    return True;  
+        return False;
     
     def generateDeviceId(self, seed):
         volatile_seed = "12345"
