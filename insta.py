@@ -1,9 +1,4 @@
 # -*- coding: utf-8 -*-
-"""
-Created on Tue Sep 20 00:20:14 2016
-
-@author: aiden
-"""
 
 import hashlib
 import requests

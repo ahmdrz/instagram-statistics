@@ -16,6 +16,10 @@ Please read the original [source code](https://github.com/LevPasha/Instagram-API
 
 ### How to use
 
+```
+pip install -r requirements.txt
+```
+
 First of all you should replace your username and password in this line :
 
 ```python
