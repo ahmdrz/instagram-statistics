@@ -1,38 +1,21 @@
 # instagram-statistics
 [![Build Status](https://travis-ci.org/ahmdrz/instagram-statistics.svg?branch=master)](https://travis-ci.org/ahmdrz/instagram-statistics)
 
-Instagram Statistics using python and mustache
-
-### Dependency
-
-1. requests
-2. pystache
-3. bootstrap
-4. jquery
-
-**Instagram-API is forked from [this](https://github.com/LevPasha/Instagram-API-python) repository but converted from python3 to python2**
-
-Please read the original [source code](https://github.com/LevPasha/Instagram-API-python)
+Instagram Statistics using python and jinja2
 
 ### How to use
 
-```
-pip install -r requirements.txt
-```
-
-First of all you should replace your username and password in this line :
-
-```python
-  insta = Instagram("USERNAME", "PASSWORD")
-```
-
-or you can use it more easier
+It's so simple.
 
 ```bash
-  python main.py <username> <password>
+  python main.py --username "<username>" --password "<password>"
 ```
 
-After that , The program will be replace your instagram info in the template file and will make a new html file called output.html 
+Optional arguments:
+
+`--liker-size` is `Number of likers to see in chart (-1 means all of them)`, default=10
+`--feeds` is `Number of feeds to scan (-1 means all of them)`, default=5
+`--template` is `Template name, name of file in templates directory`, default='basic'
 
 ### License
 See full license on [this](https://github.com/ahmdrz/instagram-statistics/blob/master/LICENSE) , Under GNU GENERAL PUBLIC LICENSE
