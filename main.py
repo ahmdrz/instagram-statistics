@@ -19,11 +19,15 @@ ap.add_argument("-p", "--password", required=True,
                 help="Instagram password")
 ap.add_argument("-t", "--template", default="basic",
                 help="Template name, name of file in templates directory")
+ap.add_argument("-f", "--feeds", default=5, type=int,
+                help="Number of feeds to scan (-1 means all of them)")
+ap.add_argument("-l", "--liker-size", default=10, type=int,
+                help="Number of likers to see in chart (-1 means all of them)")                
 args = vars(ap.parse_args())
 
 dir_path = os.path.dirname(os.path.realpath(__file__))
 template_dir = os.path.join(dir_path, "templates")
-template = os.path.join(template_dir, args["template"] + ".tpl")
+template = os.path.join(template_dir, args["template"] + ".html")
 
 if not os.path.exists(template):
     print " - There is no template file named " + args["template"]
@@ -59,8 +63,9 @@ while result["more_available"]:
     feeds.extend(result["items"])
 print " ~ {} items fetched from Instagram.".format(len(feeds))
 
-for feed in []:
-    print " - Scanning media {} ...".format(feed["id"])
+selected_feeds = feeds[:args["feeds"]]
+for i, feed in enumerate(selected_feeds):
+    print " - Scanning media ({}/{}) {} ...".format((i + 1), len(selected_feeds), feed["id"])
     likers = connection.media_likers(feed["id"])
     for user in likers["users"]:
         username = user["username"]
@@ -69,10 +74,12 @@ for feed in []:
             data_storage["likers"][username] = data
         else:
             data_storage["likers"][username]["count"] += 1
-    time.sleep(1)  # wait one second for instagram rate limiter !
+    time.sleep(2)  # wait two second for instagram rate limiter !
     print " - Media scanned, number of user scanned is {}.".format(len(likers["users"]))
 
-    data_storage["likers"] = sorted(data_storage["likers"].values(), key=lambda x: x["count"], reverse=True)
+if args["liker_size"] > len(data_storage["likers"]):
+    print " - Error: liker_size is greater than real likers"
+    args["liker_size"] = len(data_storage["likers"])
 
 print " ~ Sending request to Instagram , fetching followers"
 next_max_id = ''
@@ -95,6 +102,9 @@ while result["big_list"]:
     time.sleep(1)  # wait one second for instagram rate limiter !
     utils.list_to_dict(data_storage["followings"], result["users"], "username")
 print " ~ {} items fetched from Instagram.".format(len(data_storage["followings"]))
+
+print " ~ Logging out ..."
+connection.logout()
 
 with open(file_name, 'w') as outfile:
     print " - Saving result of application ({}) ...".format(file_name)
@@ -121,25 +131,32 @@ if exist_last_data_storage:
     new_followers = list(set(data_storage["followers"]).difference(last_data_storage["followers"]))
     new_followings = list(set(data_storage["followings"]).difference(last_data_storage["followings"]))
 
+data_storage["likers"] = sorted(data_storage["likers"].values(), key=lambda x: x["count"], reverse=True)
+
 temporary_directory = tempfile.mktemp()
-os.mkdir(temporary_directory)
+if not os.path.exists(temporary_directory):
+    os.mkdir(temporary_directory)
 
 with open(template, 'r') as template_reader:
     tpl = jinja2.Template(template_reader.read())
-    output = tpl.render(user_info=connection.logged_in_user,
-                        followings=data_storage["followings"],
-                        followers=data_storage["followers"],
-                        new_followers=new_followers,
-                        new_followings=new_followings,
-                        likers=data_storage["likers"],
-                        never_liked=never_liked)
 
-    print " ~ Creating HTML file"
-    temporary_file = os.path.join(temporary_directory, 'output.html')
-    with io.open(temporary_file, 'w', encoding='utf8') as f:
-        f.write(output)
+output = tpl.render(user_info=connection.logged_in_user,
+                    followings=data_storage["followings"],
+                    followers=data_storage["followers"],
+                    new_followers=new_followers,
+                    new_followings=new_followings,
+                    likers=data_storage["likers"],
+                    never_liked=never_liked,
+                    feeds=feeds,
+                    fans=fans,
+                    not_followed_back=not_followed_back,
+                    last_followings_count=len(last_data_storage["followings"]),
+                    last_followers_count=len(last_data_storage["followers"]),
+                    liker_index=args["liker_size"])
 
-    webbrowser.open_new_tab(temporary_file)
+print " ~ Creating HTML file"
+temporary_file = os.path.join(temporary_directory, 'output.html')
+with io.open(temporary_file, 'w', encoding='utf8') as f:
+    f.write(output)
 
-print " ~ Logging out ..."
-connection.logout()
+webbrowser.open_new_tab(temporary_file)

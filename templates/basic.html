@@ -1,0 +1,389 @@
+<html>
+
+<head>
+    <title>Instagram Statistics</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+        crossorigin="anonymous">
+    <link href="https://fonts.googleapis.com/css?family=Pacifico|Titillium+Web" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css" rel="stylesheet">
+
+    <style>
+        body {
+            font-family: 'Titillium Web', sans-serif;
+        }
+
+        .logo {
+            font-family: 'Pacifico', cursive;
+            color: white;
+            text-align: center;
+            font-size: 20px;
+        }
+
+        .bg-primary {
+            background-color: #455a64 !important;
+        }
+
+        .sidebar {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            background-color: #263238;
+        }
+
+        .center-block {
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .user-info img {
+            border-radius: 50%;
+        }
+
+        .user-info * {
+            text-align: center;
+        }
+
+        .user-info h5 {
+            color: #eceff1;
+        }
+
+        .user-info p {
+            color: #868686;
+        }
+
+        .following-item img {
+            width: 100%;
+            border-radius: 50%;
+        }
+
+        @media only screen and (max-width: 768px) {
+            .hidden-sm {
+                display: none;
+            }
+        }
+
+        .bg-image {
+            background-size: cover;
+            background-position: center center;
+        }
+
+        .feed-item .bg-image {
+            height: 300px;
+            width: 100%;
+        }
+    </style>
+</head>
+
+<body class="bg-primary">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-lg-2 col-md-3 hidden-sm p-0">
+                <div class="sidebar col-lg-2 col-md-3">
+                    <div class="logo pt-5">
+                        <p>Instagram Statistics</p>
+                    </div>
+                    <div class="user-info">
+                        <img class="center-block mb-3" src="{{user_info.profile_pic_url}}">
+                        <h5 class="mb-1">{{user_info.full_name}}</h5>
+                        <p>{{user_info.username}}</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-10 col-md-9 col-sm-12 p-0">
+                <nav class="navbar navbar-expand-lg navbar-dark bg-dark p-3 mb-5">
+                    <div class="container">
+                        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+                            aria-expanded="false" aria-label="Toggle navigation">
+                            <span class="navbar-toggler-icon"></span>
+                        </button>
+
+                        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                            <ul class="navbar-nav ml-auto">
+                                <li class="nav-item">
+                                    <a class="nav-link disabled" href="#">Logged in as ({{user_info.username}})</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </nav>
+
+                <section class="intro mb-3">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <h6>Followers</h6>
+                                        <h2>{{ followers | length }}
+                                            <small>/{{ last_followers_count }}</small>
+                                        </h2>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <h6>Followings</h6>
+                                        <h2>{{ followings | length }}
+                                            <small>/{{ last_followings_count }}</small>
+                                        </h2>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <h6>Feeds</h6>
+                                        <h2>{{ feeds | length }}</h2>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="information mb-3">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <h5>Your followings:</h5>
+                                        <br/>
+                                        <div class="owl-carousel owl-theme owl-followings">
+                                            {% for username, value in followings.items() %}
+                                            <a href="https://instagram.com/{{username}}" class="item following-item">
+                                                <img class="owl-lazy" data-src="{{value.profile_pic_url}}" alt="{{ username }}">
+                                            </a>
+                                            {% endfor %}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <h5>Your followers:</h5>
+                                        <br/>
+                                        <div class="owl-carousel owl-theme owl-followers">
+                                            {% for username, value in followers.items() %}
+                                            <a href="https://instagram.com/{{username}}" class="item following-item">
+                                                <img class="owl-lazy" data-src="{{value.profile_pic_url}}" alt="{{ username }}">
+                                            </a>
+                                            {% endfor %}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="events mb-3">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <h5>Your new followings: {{ new_followings | length }}</h5>
+                                        <br/> {% if ( new_followings | length ) == 0 %}
+                                        <h6>There is no new following.</h6>
+                                        {%else%}
+                                        <div class="owl-carousel owl-theme owl-followings">
+                                            {% for username in new_followings %}
+                                            <a href="https://instagram.com/{{username}}" class="item following-item">
+                                                <h6>{{username}}</h6>
+                                            </a>
+                                            {% endfor %}
+                                        </div>
+                                        {%endif%}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <h5>Your new followers: {{ new_followers | length }}</h5>
+                                        <br/> {% if (new_followers | length) == 0 %}
+                                        <h6>There is no new follower.</h6>
+                                        {%else%}
+                                        <div class="owl-carousel owl-theme owl-followers">
+                                            {% for username in new_followers %}
+                                            <a href="https://instagram.com/{{username}}" class="item following-item">
+                                                <h6>{{username}}</h6>
+                                            </a>
+                                            {% endfor %}
+                                        </div>
+                                        {%endif%}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="likers mb-3">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <h5>Your likers:</h5>
+                                        <br/> {% if (likers | length) == 0 %}
+                                        <h6>You have no likers !</h6>
+                                        {%else%} {% for liker in likers[:liker_index] %}
+                                        <div hidden class="liker" data-count={{liker.count}} data-name={{liker.username}}></div>
+                                        {% endfor %}
+                                        <canvas id="canvas"></canvas>
+                                        {%endif%}
+                                        <hr/>
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <h6>Best likers: </h6>
+                                                {% for liker in likers[:liker_index] %} <h6><small>{{liker.username}} ({{liker.count}})</small></h6> {% endfor %}
+                                            </div>
+                                            <div class="col-md-6">
+                                                <h6>Worst likers: </h6>
+                                                {% for liker in likers[-liker_index:] %} <h6><small>{{liker.username}} ({{liker.count}})</small></h6> {% endfor %}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="mb-3">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <h5>Not followed back:</h5>
+                                        <br/> {% if (not_followed_back | length) == 0 %}
+                                        <h6>There is no users that not followed you back.</h6>
+                                        {%else%}
+                                        <div class="owl-carousel owl-theme owl-list">
+                                            {% for username, value in not_followed_back.items() %}
+                                            <a href="https://instagram.com/{{username}}" class="item following-item">
+                                                <img class="owl-lazy" data-src="{{value.profile_pic_url}}" alt="{{ username }}">
+                                            </a>
+                                            {% endfor %}
+                                        </div> {%endif%}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <h5>Your fans:</h5>
+                                        <br/> {% if (fans | length) == 0 %}
+                                        <h6>There is no user in your fan list.</h6>
+                                        {%else%}
+                                        <div class="owl-carousel owl-theme owl-list">
+                                            {% for username, value in fans.items() %}
+                                            <a href="https://instagram.com/{{username}}" class="item following-item">
+                                                <img class="owl-lazy" data-src="{{value.profile_pic_url}}" alt="{{ username }}">
+                                            </a>
+                                            {% endfor %}
+                                        </div>
+                                        {%endif%}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="feeds mb-5">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <h5>Your feeds:</h5>
+                                        <br/> {% if (feeds | length) == 0 %}
+                                        <h6>There is no feed in your timeline.</h6>
+                                        {%else%}
+                                        <div class="owl-carousel owl-theme owl-feeds">
+                                            {% for feed in feeds %} {% if 'image_versions2' in feed %}
+                                            <a href="https://instagram.com/{{user_info.username}}" class="item feed-item">
+                                                <div class="bg-image" style="background-image: url('{{feed['image_versions2']['candidates'][0]['url']}}')">
+
+                                                </div>
+                                            </a>
+                                            {% endif %} {% endfor %}
+                                        </div>
+                                        {%endif%}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha256-cCueBR6CsyA4/9szpPfrX3s49M9vUU5BgtiJj06wt/s="
+        crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+        crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+        crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+        crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.bundle.min.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            $('.owl-followings, .owl-followers, .owl-list').owlCarousel({
+                margin: 10,
+                nav: true,
+                lazyLoad: true,
+            });
+            $('.owl-feeds').owlCarousel({
+                margin: 10,
+                nav: true,
+                lazyLoad: true,
+            });
+
+            var counts = [];
+            var names = [];
+            $(".liker").each(function () {
+                names.push($(this).data('name'));
+                counts.push($(this).data('count'));
+            });
+            var ctx = document.getElementById('canvas').getContext('2d');
+            var chart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: names,
+                    datasets: [{
+                        label: 'Likers',                        
+                        borderColor: "#263238",
+                        borderWidth: 1,
+                        data: counts,
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    legend: {
+                        position: 'top',
+                    },
+                    title: {
+                        display: true,
+                        text: 'Feed likers'
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+
+</html>
