@@ -22,7 +22,7 @@ ap.add_argument("-t", "--template", default="basic",
 ap.add_argument("-f", "--feeds", default=5, type=int,
                 help="Number of feeds to scan (-1 means all of them)")
 ap.add_argument("-l", "--liker-size", default=10, type=int,
-                help="Number of likers to see in chart (-1 means all of them)")                
+                help="Number of likers to see in chart (-1 means all of them)")
 args = vars(ap.parse_args())
 
 dir_path = os.path.dirname(os.path.realpath(__file__))
@@ -65,17 +65,20 @@ print " ~ {} items fetched from Instagram.".format(len(feeds))
 
 selected_feeds = feeds[:args["feeds"]]
 for i, feed in enumerate(selected_feeds):
-    print " - Scanning media ({}/{}) {} ...".format((i + 1), len(selected_feeds), feed["id"])
+    print " - Scanning media ({}/{}) {} ...".format((i + 1),
+                                                    len(selected_feeds), feed["id"])
     likers = connection.media_likers(feed["id"])
     for user in likers["users"]:
         username = user["username"]
         if username not in data_storage["likers"]:
-            data = {"count": 1, "name": user["full_name"], "username": username}
+            data = {"count": 1,
+                    "name": user["full_name"], "username": username}
             data_storage["likers"][username] = data
         else:
             data_storage["likers"][username]["count"] += 1
     time.sleep(2)  # wait two second for instagram rate limiter !
-    print " - Media scanned, number of user scanned is {}.".format(len(likers["users"]))
+    print " - Media scanned, number of user scanned is {}.".format(
+        len(likers["users"]))
 
 if args["liker_size"] > len(data_storage["likers"]):
     print " - Error: liker_size is greater than real likers"
@@ -90,7 +93,8 @@ while result["big_list"]:
     result = connection.followers(connection.username_id, max_id=next_max_id)
     time.sleep(1)  # wait one second for instagram rate limiter !
     utils.list_to_dict(data_storage["followers"], result["users"], "username")
-print " ~ {} items fetched from Instagram.".format(len(data_storage["followers"]))
+print " ~ {} items fetched from Instagram.".format(
+    len(data_storage["followers"]))
 
 print " ~ Sending request to Instagram , fetching followings"
 next_max_id = ''
@@ -101,7 +105,8 @@ while result["big_list"]:
     result = connection.followers(connection.username_id, max_id=next_max_id)
     time.sleep(1)  # wait one second for instagram rate limiter !
     utils.list_to_dict(data_storage["followings"], result["users"], "username")
-print " ~ {} items fetched from Instagram.".format(len(data_storage["followings"]))
+print " ~ {} items fetched from Instagram.".format(
+    len(data_storage["followings"]))
 
 print " ~ Logging out ..."
 connection.logout()
@@ -109,7 +114,8 @@ connection.logout()
 with open(file_name, 'w') as outfile:
     print " - Saving result of application ({}) ...".format(file_name)
     json.dump(data_storage, outfile)
-    print " - Data in {} is about your privacy ! Please note.".format(file_name)
+    print " - Data in {} is about your privacy ! Please note.".format(
+        file_name)
 
 never_liked = []
 fans = {}
@@ -125,13 +131,19 @@ for following in data_storage["followings"]:
     if following not in data_storage["followers"]:
         not_followed_back[following] = data_storage["followings"][following]
 
+unfollowers = list(set(last_data_storage["followers"]).difference(
+    data_storage["followers"]))
+
 new_followers = []
 new_followings = []
 if exist_last_data_storage:
-    new_followers = list(set(data_storage["followers"]).difference(last_data_storage["followers"]))
-    new_followings = list(set(data_storage["followings"]).difference(last_data_storage["followings"]))
+    new_followers = list(set(data_storage["followers"]).difference(
+        last_data_storage["followers"]))
+    new_followings = list(set(data_storage["followings"]).difference(
+        last_data_storage["followings"]))
 
-data_storage["likers"] = sorted(data_storage["likers"].values(), key=lambda x: x["count"], reverse=True)
+data_storage["likers"] = sorted(
+    data_storage["likers"].values(), key=lambda x: x["count"], reverse=True)
 
 temporary_directory = tempfile.mktemp()
 if not os.path.exists(temporary_directory):
@@ -152,7 +164,8 @@ output = tpl.render(user_info=connection.logged_in_user,
                     not_followed_back=not_followed_back,
                     last_followings_count=len(last_data_storage["followings"]),
                     last_followers_count=len(last_data_storage["followers"]),
-                    liker_index=args["liker_size"])
+                    liker_index=args["liker_size"],
+                    unfollowers=unfollowers)
 
 print " ~ Creating HTML file"
 temporary_file = os.path.join(temporary_directory, 'output.html')

@@ -17,5 +17,9 @@ Optional arguments:
 `--feeds` is `Number of feeds to scan (-1 means all of them)`, default=5
 `--template` is `Template name, name of file in templates directory`, default='basic'
 
+### TODO list
+
+- [ ] Currently it's based on username, We have to change it to user's primary key.
+
 ### License
 See full license on [this](https://github.com/ahmdrz/instagram-statistics/blob/master/LICENSE) , Under GNU GENERAL PUBLIC LICENSE
